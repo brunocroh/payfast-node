@@ -23,5 +23,5 @@ process.on('SIGINT', function(){
 	mongoose.connection.close(function(){
 		console.log('[INFO] Conexão padrão do mongoose desconectada, app encerrado.');
 		process.exit(0);
-	})
-})
+	});
+});

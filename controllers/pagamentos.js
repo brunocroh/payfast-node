@@ -6,31 +6,60 @@ const PagamentoModel = mongoose.model('Pagamento',pagamento);
 
 module.exports = function(app){
 
-	app.get('/pagamentos', function(req, res){
+    app.get('/pagamentos', function(req, res){
+        const query = {};
 
-		PagamentoModel.find({},function(err, data){
-			if(err) return console.log('[ERRO] ' + err);
-			return res.send(data);
-		});
-	});
+        PagamentoModel.find(query,function(err,pagamentos){
+            res.json(pagamentos);
+        });
+    });
 
-	app.get('/pagamentos/:id', function(req, res){
-		query = {_id: new ObjectId(req.params.id)};
+    app.get('/pagamentos/:id', function(req, res){
+        const query = {_id: new ObjectId(req.params.id)};
 
-		PagamentoModel.find(query,function(err, data){
-			if(err) return console.log('[ERRO] ' + err);
-			return res.send(data);
-		});
-	});
+        PagamentoModel.findOne(query,function(err,pagamento){
+            res.json(pagamento);
+        });
+    });
 
-	app.post('/pagamentos/pagamento',function(req,res){
-		const pagamento = new PagamentoModel(req.body);
+    app.post('/pagamentos/pagamento',function(req,res){
+        const pagamento = new PagamentoModel(req.body);
 
-		pagamento.save(function(err, data){
-			if(err) return console.log('[ERRO] ' + err);
-			return res.send(data);
-		});
-	});
+        console.log("pagamento : ",pagamento);
+        console.log("Moeda : ",pagamento.moeda);
+
+        var errors = req.validationErrors();
+
+        if(errors){
+            console.log("Erros de Validação Encontrados");
+            res.status(400).send(errors);
+            return;
+        }
+
+        pagamento.save(function(err){
+            if(err){
+                console.log("Falha ao salvar.");
+                res.status(400).send("Falha ao salvar o pagamento.");
+                return;
+            }
+            res.json(pagamento);
+            return;
+        });
+    });
 
 
-}
+    app.delete('/pagamentos/delete/all',function(req,res){
+        const pagamento = new PagamentoModel({});
+
+        pagamento.remove({}, function(err){
+            if(err){
+                console.log('[ERRO] Falha ao remover todos os pagamentos');
+                res.status(400).send({erro: "Falha ao remover todos os pagamentos"});
+                return;
+            }
+
+            res.send({info:"Todos os pagamentos foram removidos"});
+            return;
+        });
+    });
+};
