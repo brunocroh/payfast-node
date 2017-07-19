@@ -25,16 +25,7 @@ module.exports = function(app){
     app.post('/pagamentos/pagamento',function(req,res){
         const pagamento = new PagamentoModel(req.body);
 
-        console.log("pagamento : ",pagamento);
-        console.log("Moeda : ",pagamento.moeda);
-
-        var errors = req.validationErrors();
-
-        if(errors){
-            console.log("Erros de Validação Encontrados");
-            res.status(400).send(errors);
-            return;
-        }
+        console.log("valor em dolares : ", pagamento.valorDolar);
 
         pagamento.save(function(err){
             if(err){

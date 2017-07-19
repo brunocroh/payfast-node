@@ -16,5 +16,12 @@ const _schema = {
     descricao
 };
 
-module.exports = new Schema(_schema);
+var PagamentoSchema  = new Schema(_schema);
 
+PagamentoSchema
+.virtual('valorDolar')
+.get(function(){
+    return this.valor*3;
+});
+
+module.exports = PagamentoSchema;
