@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+
 const forma_de_pagamento = require('./fields/field-forma-de-pagamento');
 const valor = require('./fields/field-valor');
 const moeda = require('./fields/field-moeda');
@@ -19,9 +20,9 @@ const _schema = {
 var PagamentoSchema  = new Schema(_schema);
 
 PagamentoSchema
-.virtual('valorDolar')
-.get(function(){
-    return this.valor*3;
-});
+    .virtual('valorDolar')
+    .get(function(){
+        return this.valor*3;
+    });
 
 module.exports = PagamentoSchema;

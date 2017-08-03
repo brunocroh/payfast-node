@@ -22,7 +22,7 @@ module.exports = function(app){
         });
     });
 
-    app.post('/pagamentos/pagamento',function(req,res){
+    app.post( '/pagamentos/pagamento' ,function(req,res){
         const pagamento = new PagamentoModel(req.body);
 
         console.log("valor em dolares : ", pagamento.valorDolar);
